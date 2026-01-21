@@ -484,17 +484,18 @@ const fetchInitialData = async () => {
   }
 }
 
-// Save functions (placeholder for now)
+// Save functions
 const saveBranchInfo = async () => {
   branchLoading.value = true
   try {
-    // TODO: Implement API call to save branch information
-    console.log('Saving branch info:', branchInfo)
+    await apiService.updateBranchInfo({
+      name: branchInfo.branchName,
+      timezone: branchInfo.timezone,
+    })
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
+    // Refresh the auth store to get updated branch info
+    await authStore.fetchBranchInfoWithCounts()
 
-    // Show success message (you can add toast notifications here)
     console.log('Branch information saved successfully')
   } catch (error) {
     console.error('Error saving branch info:', error)

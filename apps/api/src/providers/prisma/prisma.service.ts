@@ -18,13 +18,6 @@ export class PrismaService
     super({
       // log: ['query', 'info', 'warn', 'error'], // Enable logging of queries
     });
-    this.$use(async (params, next) => {
-      // console.log('Prisma query:', params);
-      const result = await next(params);
-      // console.log('Prisma result:', result);
-      // return this.omitPasswordFields(result);
-      return result;
-    });
   }
 
   async onModuleInit() {

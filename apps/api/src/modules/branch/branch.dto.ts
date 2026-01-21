@@ -90,6 +90,10 @@ class CreateBranchUserDto {
   @IsString()
   @IsOptional()
   deviceSerialNumber?: string;
+
+  @IsString()
+  @IsOptional()
+  timezone?: string;
 }
 
 class DeviceSnDto {

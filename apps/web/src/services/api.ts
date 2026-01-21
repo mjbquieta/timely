@@ -246,6 +246,16 @@ class ApiService {
     }
   }
 
+  async updateBranchInfo(branchData: { name?: string; timezone?: string }): Promise<Branch> {
+    try {
+      const response = await api.patch<Branch>('/api/v1/me/branch', branchData)
+      return response.data
+    } catch (error: any) {
+      console.error('Update branch info API error:', error)
+      throw this.handleApiError(error, 'Failed to update branch information')
+    }
+  }
+
   async getAllBranches(): Promise<Branch[]> {
     try {
       const response = await api.get<Branch[]>('/api/v1/branches')

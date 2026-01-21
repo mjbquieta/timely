@@ -342,10 +342,10 @@ export class AuthService implements OnModuleInit {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
-        expiresIn: this.accessTokenDuration,
+        expiresIn: this.accessTokenDuration as any,
       }),
       this.jwtService.signAsync(payload, {
-        expiresIn: this.refreshTokenDuration,
+        expiresIn: this.refreshTokenDuration as any,
       }),
     ]);
 

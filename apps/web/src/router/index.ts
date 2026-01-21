@@ -6,7 +6,9 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/dashboard',
+      name: 'landing',
+      component: () => import('../views/LandingPage.vue'),
+      meta: { requiresGuest: true },
     },
     {
       path: '/branch/login',
