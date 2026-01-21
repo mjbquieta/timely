@@ -1,14 +1,14 @@
 <template>
-  <div class="min-h-screen bg-palette-off-white">
+  <div class="min-h-screen bg-palette-off-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-300">
     <!-- Navigation -->
     <nav
-      class="fixed top-0 left-0 right-0 z-50 bg-palette-off-white/95 backdrop-blur-sm border-b border-palette-light-beige"
+      class="fixed top-0 left-0 right-0 z-50 bg-palette-off-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-palette-light-beige dark:border-gray-700 transition-colors duration-300"
     >
       <div class="max-w-7xl mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2">
-            <div class="w-10 h-10 bg-palette-dark-blue rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-10 h-10 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center">
+              <svg class="w-6 h-6 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -17,19 +17,56 @@
                 />
               </svg>
             </div>
-            <span class="text-2xl font-bold text-palette-dark-blue">Timely</span>
+            <span class="text-2xl font-bold text-palette-dark-blue dark:text-white">Timely</span>
           </div>
           <div class="flex items-center space-x-4">
+            <!-- Theme Toggle Button -->
+            <button
+              @click="toggleTheme"
+              class="p-2 rounded-lg bg-palette-light-beige/50 dark:bg-gray-800 hover:bg-palette-light-beige dark:hover:bg-gray-700 transition-colors"
+              :title="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
+            >
+              <!-- Sun icon (shown in dark mode) -->
+              <svg
+                v-if="isDark"
+                class="w-5 h-5 text-yellow-400"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+                />
+              </svg>
+              <!-- Moon icon (shown in light mode) -->
+              <svg
+                v-else
+                class="w-5 h-5 text-palette-dark-blue"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                />
+              </svg>
+            </button>
             <a
               href="#contact"
-              class="px-4 py-2 text-palette-dark-blue hover:text-palette-medium-blue font-medium transition-colors"
+              class="px-4 py-2 text-palette-dark-blue dark:text-palette-light-beige hover:text-palette-medium-blue dark:hover:text-white font-medium transition-colors"
             >
               Contact Us
             </a>
             <div class="relative" ref="dropdownRef">
               <button
                 @click="showLoginDropdown = !showLoginDropdown"
-                class="px-6 py-2.5 bg-palette-dark-blue text-white rounded-lg hover:bg-palette-medium-blue font-medium transition-colors inline-flex items-center space-x-2"
+                class="px-6 py-2.5 bg-palette-dark-blue dark:bg-palette-light-beige text-white dark:text-gray-900 rounded-lg hover:bg-palette-medium-blue dark:hover:bg-white font-medium transition-colors inline-flex items-center space-x-2"
               >
                 <span>Sign In</span>
                 <svg
@@ -49,18 +86,18 @@
               </button>
               <div
                 v-if="showLoginDropdown"
-                class="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-lg border border-palette-light-beige overflow-hidden z-50"
+                class="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-lg border border-palette-light-beige dark:border-gray-700 overflow-hidden z-50"
               >
                 <router-link
                   to="/company/login"
-                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white transition-colors"
+                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white dark:hover:bg-gray-700 transition-colors"
                   @click="showLoginDropdown = false"
                 >
                   <div
-                    class="w-10 h-10 bg-palette-dark-blue/10 rounded-lg flex items-center justify-center"
+                    class="w-10 h-10 bg-palette-dark-blue/10 dark:bg-palette-light-beige/10 rounded-lg flex items-center justify-center"
                   >
                     <svg
-                      class="w-5 h-5 text-palette-dark-blue"
+                      class="w-5 h-5 text-palette-dark-blue dark:text-palette-light-beige"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -74,20 +111,20 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-palette-dark-blue">Company</p>
-                    <p class="text-sm text-palette-medium-blue">Multi-branch management</p>
+                    <p class="font-semibold text-palette-dark-blue dark:text-white">Company</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Multi-branch management</p>
                   </div>
                 </router-link>
                 <router-link
                   to="/branch/login"
-                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white transition-colors border-t border-palette-light-beige"
+                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white dark:hover:bg-gray-700 transition-colors border-t border-palette-light-beige dark:border-gray-700"
                   @click="showLoginDropdown = false"
                 >
                   <div
-                    class="w-10 h-10 bg-palette-dark-blue/10 rounded-lg flex items-center justify-center"
+                    class="w-10 h-10 bg-palette-dark-blue/10 dark:bg-palette-light-beige/10 rounded-lg flex items-center justify-center"
                   >
                     <svg
-                      class="w-5 h-5 text-palette-dark-blue"
+                      class="w-5 h-5 text-palette-dark-blue dark:text-palette-light-beige"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -107,20 +144,20 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-palette-dark-blue">Branch</p>
-                    <p class="text-sm text-palette-medium-blue">Single location admin</p>
+                    <p class="font-semibold text-palette-dark-blue dark:text-white">Branch</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Single location admin</p>
                   </div>
                 </router-link>
                 <router-link
                   to="/employee/login"
-                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white transition-colors border-t border-palette-light-beige"
+                  class="flex items-center space-x-3 px-4 py-3 hover:bg-palette-off-white dark:hover:bg-gray-700 transition-colors border-t border-palette-light-beige dark:border-gray-700"
                   @click="showLoginDropdown = false"
                 >
                   <div
-                    class="w-10 h-10 bg-palette-dark-blue/10 rounded-lg flex items-center justify-center"
+                    class="w-10 h-10 bg-palette-dark-blue/10 dark:bg-palette-light-beige/10 rounded-lg flex items-center justify-center"
                   >
                     <svg
-                      class="w-5 h-5 text-palette-dark-blue"
+                      class="w-5 h-5 text-palette-dark-blue dark:text-palette-light-beige"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -134,8 +171,8 @@
                     </svg>
                   </div>
                   <div>
-                    <p class="font-semibold text-palette-dark-blue">Employee</p>
-                    <p class="text-sm text-palette-medium-blue">View your attendance</p>
+                    <p class="font-semibold text-palette-dark-blue dark:text-white">Employee</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">View your attendance</p>
                   </div>
                 </router-link>
               </div>
@@ -150,24 +187,24 @@
       <div class="max-w-7xl mx-auto">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <div class="space-y-8">
-            <div class="inline-flex items-center px-4 py-2 bg-palette-light-beige/50 rounded-full">
+            <div class="inline-flex items-center px-4 py-2 bg-palette-light-beige/50 dark:bg-gray-800 rounded-full">
               <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
-              <span class="text-sm text-palette-medium-blue font-medium"
+              <span class="text-sm text-palette-medium-blue dark:text-gray-300 font-medium"
                 >Trusted by businesses everywhere</span
               >
             </div>
-            <h1 class="text-5xl lg:text-6xl font-bold text-palette-dark-blue leading-tight">
+            <h1 class="text-5xl lg:text-6xl font-bold text-palette-dark-blue dark:text-white leading-tight">
               Track attendance,<br />
-              <span class="text-palette-medium-blue">effortlessly.</span>
+              <span class="text-palette-medium-blue dark:text-palette-light-beige">effortlessly.</span>
             </h1>
-            <p class="text-xl text-palette-medium-blue leading-relaxed max-w-lg">
+            <p class="text-xl text-palette-medium-blue dark:text-gray-300 leading-relaxed max-w-lg">
               Timely connects to your biometric devices — fingerprint scanners, face recognition,
               and RFID readers — to automatically track when employees clock in and out.
             </p>
             <div class="flex flex-col sm:flex-row gap-4">
               <a
                 href="#contact"
-                class="inline-flex items-center justify-center px-8 py-4 bg-palette-dark-blue text-white rounded-xl hover:bg-palette-medium-blue font-semibold text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
+                class="inline-flex items-center justify-center px-8 py-4 bg-palette-dark-blue dark:bg-palette-light-beige text-white dark:text-gray-900 rounded-xl hover:bg-palette-medium-blue dark:hover:bg-white font-semibold text-lg transition-all hover:shadow-lg hover:-translate-y-0.5"
               >
                 Contact Us
                 <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -181,7 +218,7 @@
               </a>
               <a
                 href="#features"
-                class="inline-flex items-center justify-center px-8 py-4 border-2 border-palette-light-beige text-palette-dark-blue rounded-xl hover:border-palette-medium-blue font-semibold text-lg transition-all"
+                class="inline-flex items-center justify-center px-8 py-4 border-2 border-palette-light-beige dark:border-gray-600 text-palette-dark-blue dark:text-white rounded-xl hover:border-palette-medium-blue dark:hover:border-palette-light-beige font-semibold text-lg transition-all"
               >
                 See How It Works
               </a>
@@ -189,21 +226,21 @@
           </div>
           <div class="relative">
             <div
-              class="absolute inset-0 bg-gradient-to-br from-palette-dark-blue/10 to-palette-medium-blue/10 rounded-3xl transform rotate-3"
+              class="absolute inset-0 bg-gradient-to-br from-palette-dark-blue/10 to-palette-medium-blue/10 dark:from-palette-light-beige/10 dark:to-palette-medium-blue/10 rounded-3xl transform rotate-3"
             ></div>
             <div
-              class="relative bg-white rounded-3xl shadow-2xl p-8 border border-palette-light-beige"
+              class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-palette-light-beige dark:border-gray-700"
             >
               <!-- Mock Dashboard Preview -->
               <div class="space-y-6">
                 <div class="flex items-center justify-between">
                   <div>
-                    <p class="text-sm text-palette-medium-blue">Today's Overview</p>
-                    <p class="text-2xl font-bold text-palette-dark-blue">Tuesday, Jan 21</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Today's Overview</p>
+                    <p class="text-2xl font-bold text-palette-dark-blue dark:text-white">Tuesday, Jan 21</p>
                   </div>
-                  <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                  <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
                     <svg
-                      class="w-6 h-6 text-green-600"
+                      class="w-6 h-6 text-green-600 dark:text-green-400"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -218,38 +255,37 @@
                   </div>
                 </div>
                 <div class="grid grid-cols-3 gap-4">
-                  <div class="bg-palette-off-white rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-green-600">24</p>
-                    <p class="text-sm text-palette-medium-blue">Present</p>
+                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
+                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">24</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Present</p>
                   </div>
-                  <div class="bg-palette-off-white rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-yellow-600">3</p>
-                    <p class="text-sm text-palette-medium-blue">Late</p>
+                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
+                    <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-400">3</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Late</p>
                   </div>
-                  <div class="bg-palette-off-white rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-red-600">1</p>
-                    <p class="text-sm text-palette-medium-blue">Absent</p>
+                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
+                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">1</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Absent</p>
                   </div>
                 </div>
                 <div class="space-y-3">
                   <div
-                    class="flex items-center justify-between p-3 bg-palette-off-white rounded-lg"
+                    class="flex items-center justify-between p-3 bg-palette-off-white dark:bg-gray-700 rounded-lg"
                   >
                     <div class="flex items-center space-x-3">
                       <div
-                        class="w-10 h-10 bg-palette-dark-blue rounded-full flex items-center justify-center text-white font-semibold"
+                        class="w-10 h-10 bg-palette-dark-blue dark:bg-palette-light-beige rounded-full flex items-center justify-center text-white dark:text-gray-900 font-semibold"
                       >
                         JD
                       </div>
                       <div>
-                        <p class="font-medium text-palette-dark-blue">John Doe</p>
-                        <p class="text-sm text-palette-medium-blue">Clocked in at 8:45 AM</p>
+                        <p class="font-medium text-palette-dark-blue dark:text-white">John Doe</p>
+                        <p class="text-sm text-palette-medium-blue dark:text-gray-400">Clocked in at 8:45 AM</p>
                       </div>
                     </div>
-                    <!-- <span class="px-3 py-1 bg-green-100 text-green-700 text-sm font-medium rounded-full">On Time</span> -->
                   </div>
                   <div
-                    class="flex items-center justify-between p-3 bg-palette-off-white rounded-lg"
+                    class="flex items-center justify-between p-3 bg-palette-off-white dark:bg-gray-700 rounded-lg"
                   >
                     <div class="flex items-center space-x-3">
                       <div
@@ -258,14 +294,10 @@
                         AS
                       </div>
                       <div>
-                        <p class="font-medium text-palette-dark-blue">Ana Santos</p>
-                        <p class="text-sm text-palette-medium-blue">Clocked in at 9:15 AM</p>
+                        <p class="font-medium text-palette-dark-blue dark:text-white">Ana Santos</p>
+                        <p class="text-sm text-palette-medium-blue dark:text-gray-400">Clocked in at 9:15 AM</p>
                       </div>
                     </div>
-                    <!-- <span
-                      class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm font-medium rounded-full"
-                      >Late</span
-                    > -->
                   </div>
                 </div>
               </div>
@@ -276,25 +308,25 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-20 px-6 bg-white">
+    <section id="features" class="py-20 px-6 bg-white dark:bg-gray-800 transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-3xl mx-auto mb-16">
-          <h2 class="text-4xl font-bold text-palette-dark-blue mb-4">
+          <h2 class="text-4xl font-bold text-palette-dark-blue dark:text-white mb-4">
             Everything you need to manage attendance
           </h2>
-          <p class="text-xl text-palette-medium-blue">
+          <p class="text-xl text-palette-medium-blue dark:text-gray-300">
             From biometric devices to detailed reports, Timely handles it all.
           </p>
         </div>
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <!-- Feature 1 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -303,8 +335,8 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">Fingerprint Scanner</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Fingerprint Scanner</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Secure biometric authentication ensures only the right person clocks in. No more buddy
               punching.
             </p>
@@ -312,12 +344,12 @@
 
           <!-- Feature 2 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -332,20 +364,20 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">Face Recognition</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Face Recognition</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Just show your face and you're clocked in. Fast, contactless, and incredibly accurate.
             </p>
           </div>
 
           <!-- Feature 3 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -354,20 +386,20 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">RFID Card</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">RFID Card</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Tap your card and go. Simple, reliable, and perfect for high-traffic workplaces.
             </p>
           </div>
 
           <!-- Feature 4 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -376,8 +408,8 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">Real-time Reports</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Real-time Reports</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               See who's at work right now. Track patterns, identify issues, and make informed
               decisions.
             </p>
@@ -385,12 +417,12 @@
 
           <!-- Feature 5 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -399,8 +431,8 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">Multi-Branch Support</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Multi-Branch Support</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Managing multiple locations? No problem. Track attendance across all your branches
               from one dashboard.
             </p>
@@ -408,12 +440,12 @@
 
           <!-- Feature 6 -->
           <div
-            class="group p-8 bg-palette-off-white rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
+            class="group p-8 bg-palette-off-white dark:bg-gray-700 rounded-2xl hover:shadow-xl transition-all duration-300 hover:-translate-y-1"
           >
             <div
-              class="w-14 h-14 bg-palette-dark-blue rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
+              class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -422,8 +454,8 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue mb-3">Shift Management</h3>
-            <p class="text-palette-medium-blue leading-relaxed">
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Shift Management</h3>
+            <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Create and manage work schedules. Automatically track late arrivals and early
               departures.
             </p>
@@ -478,46 +510,46 @@
     </section>
 
     <!-- Stats Section -->
-    <section class="py-20 px-6 bg-white">
+    <section class="py-20 px-6 bg-white dark:bg-gray-800 transition-colors duration-300">
       <div class="max-w-7xl mx-auto">
         <div class="grid md:grid-cols-4 gap-8 text-center">
           <div>
-            <p class="text-5xl font-bold text-palette-dark-blue mb-2">99.9%</p>
-            <p class="text-palette-medium-blue">Uptime Reliability</p>
+            <p class="text-5xl font-bold text-palette-dark-blue dark:text-white mb-2">99.9%</p>
+            <p class="text-palette-medium-blue dark:text-gray-400">Uptime Reliability</p>
           </div>
           <div>
-            <p class="text-5xl font-bold text-palette-dark-blue mb-2">&lt;1s</p>
-            <p class="text-palette-medium-blue">Clock-in Time</p>
+            <p class="text-5xl font-bold text-palette-dark-blue dark:text-white mb-2">&lt;1s</p>
+            <p class="text-palette-medium-blue dark:text-gray-400">Clock-in Time</p>
           </div>
           <div>
-            <p class="text-5xl font-bold text-palette-dark-blue mb-2">24/7</p>
-            <p class="text-palette-medium-blue">Real-time Sync</p>
+            <p class="text-5xl font-bold text-palette-dark-blue dark:text-white mb-2">24/7</p>
+            <p class="text-palette-medium-blue dark:text-gray-400">Real-time Sync</p>
           </div>
           <div>
-            <p class="text-5xl font-bold text-palette-dark-blue mb-2">100%</p>
-            <p class="text-palette-medium-blue">Accurate Records</p>
+            <p class="text-5xl font-bold text-palette-dark-blue dark:text-white mb-2">100%</p>
+            <p class="text-palette-medium-blue dark:text-gray-400">Accurate Records</p>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6 bg-palette-off-white">
+    <section id="contact" class="py-20 px-6 bg-palette-off-white dark:bg-gray-900 transition-colors duration-300">
       <div class="max-w-4xl mx-auto text-center">
-        <h2 class="text-4xl font-bold text-palette-dark-blue mb-4">
+        <h2 class="text-4xl font-bold text-palette-dark-blue dark:text-white mb-4">
           Ready to simplify your attendance tracking?
         </h2>
-        <p class="text-xl text-palette-medium-blue mb-8">
+        <p class="text-xl text-palette-medium-blue dark:text-gray-300 mb-8">
           Get in touch with us and we'll set up Timely for your business.
         </p>
-        <div class="bg-white rounded-2xl shadow-lg p-8 max-w-xl mx-auto">
+        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 max-w-xl mx-auto">
           <div class="space-y-6">
-            <div class="flex items-center space-x-4 p-4 bg-palette-off-white rounded-xl">
+            <div class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl">
               <div
-                class="w-12 h-12 bg-palette-dark-blue rounded-lg flex items-center justify-center flex-shrink-0"
+                class="w-12 h-12 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center flex-shrink-0"
               >
                 <svg
-                  class="w-6 h-6 text-white"
+                  class="w-6 h-6 text-white dark:text-gray-900"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -531,21 +563,21 @@
                 </svg>
               </div>
               <div class="text-left">
-                <p class="text-sm text-palette-medium-blue">Email us at</p>
+                <p class="text-sm text-palette-medium-blue dark:text-gray-400">Email us at</p>
                 <a
                   href="mailto:hello@timely.com"
-                  class="text-lg font-semibold text-palette-dark-blue hover:text-palette-medium-blue transition-colors"
+                  class="text-lg font-semibold text-palette-dark-blue dark:text-white hover:text-palette-medium-blue dark:hover:text-palette-light-beige transition-colors"
                 >
                   hello@timely.com
                 </a>
               </div>
             </div>
-            <div class="flex items-center space-x-4 p-4 bg-palette-off-white rounded-xl">
+            <div class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl">
               <div
-                class="w-12 h-12 bg-palette-dark-blue rounded-lg flex items-center justify-center flex-shrink-0"
+                class="w-12 h-12 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center flex-shrink-0"
               >
                 <svg
-                  class="w-6 h-6 text-white"
+                  class="w-6 h-6 text-white dark:text-gray-900"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -559,34 +591,34 @@
                 </svg>
               </div>
               <div class="text-left">
-                <p class="text-sm text-palette-medium-blue">Call us at</p>
+                <p class="text-sm text-palette-medium-blue dark:text-gray-400">Call us at</p>
                 <a
                   href="tel:+639123456789"
-                  class="text-lg font-semibold text-palette-dark-blue hover:text-palette-medium-blue transition-colors"
+                  class="text-lg font-semibold text-palette-dark-blue dark:text-white hover:text-palette-medium-blue dark:hover:text-palette-light-beige transition-colors"
                 >
                   +63 912 345 6789
                 </a>
               </div>
             </div>
           </div>
-          <div class="mt-8 pt-6 border-t border-palette-light-beige">
-            <p class="text-palette-medium-blue text-sm mb-4">Already a customer?</p>
+          <div class="mt-8 pt-6 border-t border-palette-light-beige dark:border-gray-700">
+            <p class="text-palette-medium-blue dark:text-gray-400 text-sm mb-4">Already a customer?</p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
               <router-link
                 to="/company/login"
-                class="px-4 py-2 text-sm font-medium text-palette-dark-blue hover:bg-palette-off-white rounded-lg transition-colors"
+                class="px-4 py-2 text-sm font-medium text-palette-dark-blue dark:text-gray-300 hover:bg-palette-off-white dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 Company Login
               </router-link>
               <router-link
                 to="/branch/login"
-                class="px-4 py-2 text-sm font-medium text-palette-dark-blue hover:bg-palette-off-white rounded-lg transition-colors"
+                class="px-4 py-2 text-sm font-medium text-palette-dark-blue dark:text-gray-300 hover:bg-palette-off-white dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 Branch Login
               </router-link>
               <router-link
                 to="/employee/login"
-                class="px-4 py-2 text-sm font-medium text-palette-dark-blue hover:bg-palette-off-white rounded-lg transition-colors"
+                class="px-4 py-2 text-sm font-medium text-palette-dark-blue dark:text-gray-300 hover:bg-palette-off-white dark:hover:bg-gray-700 rounded-lg transition-colors"
               >
                 Employee Login
               </router-link>
@@ -597,7 +629,7 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-6 bg-palette-dark-blue">
+    <footer class="py-12 px-6 bg-palette-dark-blue dark:bg-gray-950">
       <div class="max-w-7xl mx-auto">
         <div class="flex flex-col md:flex-row items-center justify-between">
           <div class="flex items-center space-x-2 mb-4 md:mb-0">
@@ -613,7 +645,7 @@
             </div>
             <span class="text-2xl font-bold text-white">Timely</span>
           </div>
-          <p class="text-palette-light-beige text-sm">
+          <p class="text-palette-light-beige dark:text-gray-400 text-sm">
             &copy; {{ currentYear }} Timely. All rights reserved.
           </p>
         </div>
@@ -624,6 +656,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useTheme } from '../composables/useTheme'
+
+const { isDark, toggleTheme } = useTheme()
 
 const currentYear = new Date().getFullYear()
 const showLoginDropdown = ref(false)
@@ -643,3 +678,4 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
+

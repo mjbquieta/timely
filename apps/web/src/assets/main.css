@@ -4,6 +4,6 @@
 
 @layer base {
   body {
-    @apply bg-palette-off-white;
+    @apply bg-palette-off-white dark:bg-gray-900 transition-colors duration-300;
   }
 }
