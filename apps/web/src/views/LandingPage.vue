@@ -1,5 +1,7 @@
 <template>
-  <div class="min-h-screen bg-palette-off-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-300">
+  <div
+    class="min-h-screen bg-palette-off-white dark:bg-gray-900 relative overflow-hidden transition-colors duration-300"
+  >
     <!-- Navigation -->
     <nav
       class="fixed top-0 left-0 right-0 z-50 bg-palette-off-white/95 dark:bg-gray-900/95 backdrop-blur-sm border-b border-palette-light-beige dark:border-gray-700 transition-colors duration-300"
@@ -7,8 +9,15 @@
       <div class="max-w-7xl mx-auto px-6 py-4">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2">
-            <div class="w-10 h-10 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center">
-              <svg class="w-6 h-6 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div
+              class="w-10 h-10 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="w-6 h-6 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -112,7 +121,9 @@
                   </div>
                   <div>
                     <p class="font-semibold text-palette-dark-blue dark:text-white">Company</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Multi-branch management</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">
+                      Multi-branch management
+                    </p>
                   </div>
                 </router-link>
                 <router-link
@@ -145,7 +156,9 @@
                   </div>
                   <div>
                     <p class="font-semibold text-palette-dark-blue dark:text-white">Branch</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Single location admin</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">
+                      Single location admin
+                    </p>
                   </div>
                 </router-link>
                 <router-link
@@ -172,7 +185,9 @@
                   </div>
                   <div>
                     <p class="font-semibold text-palette-dark-blue dark:text-white">Employee</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">View your attendance</p>
+                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">
+                      View your attendance
+                    </p>
                   </div>
                 </router-link>
               </div>
@@ -187,15 +202,19 @@
       <div class="max-w-7xl mx-auto">
         <div class="grid lg:grid-cols-2 gap-12 items-center">
           <div class="space-y-8">
-            <div class="inline-flex items-center px-4 py-2 bg-palette-light-beige/50 dark:bg-gray-800 rounded-full">
+            <!-- <div class="inline-flex items-center px-4 py-2 bg-palette-light-beige/50 dark:bg-gray-800 rounded-full">
               <span class="w-2 h-2 bg-green-500 rounded-full mr-2 animate-pulse"></span>
               <span class="text-sm text-palette-medium-blue dark:text-gray-300 font-medium"
                 >Trusted by businesses everywhere</span
               >
-            </div>
-            <h1 class="text-5xl lg:text-6xl font-bold text-palette-dark-blue dark:text-white leading-tight">
+            </div> -->
+            <h1
+              class="text-5xl lg:text-6xl font-bold text-palette-dark-blue dark:text-white leading-tight"
+            >
               Track attendance,<br />
-              <span class="text-palette-medium-blue dark:text-palette-light-beige">effortlessly.</span>
+              <span class="text-palette-medium-blue dark:text-palette-light-beige"
+                >effortlessly.</span
+              >
             </h1>
             <p class="text-xl text-palette-medium-blue dark:text-gray-300 leading-relaxed max-w-lg">
               Timely connects to your biometric devices — fingerprint scanners, face recognition,
@@ -226,79 +245,31 @@
           </div>
           <div class="relative">
             <div
-              class="absolute inset-0 bg-gradient-to-br from-palette-dark-blue/10 to-palette-medium-blue/10 dark:from-palette-light-beige/10 dark:to-palette-medium-blue/10 rounded-3xl transform rotate-3"
+              class="absolute inset-0 bg-gradient-to-br from-palette-dark-blue/20 to-palette-medium-blue/20 dark:from-palette-light-beige/10 dark:to-palette-medium-blue/10 rounded-3xl transform rotate-3"
             ></div>
-            <div
-              class="relative bg-white dark:bg-gray-800 rounded-3xl shadow-2xl p-8 border border-palette-light-beige dark:border-gray-700"
-            >
-              <!-- Mock Dashboard Preview -->
-              <div class="space-y-6">
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Today's Overview</p>
-                    <p class="text-2xl font-bold text-palette-dark-blue dark:text-white">Tuesday, Jan 21</p>
-                  </div>
-                  <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
-                    <svg
-                      class="w-6 h-6 text-green-600 dark:text-green-400"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                  </div>
-                </div>
-                <div class="grid grid-cols-3 gap-4">
-                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-green-600 dark:text-green-400">24</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Present</p>
-                  </div>
-                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-yellow-600 dark:text-yellow-400">3</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Late</p>
-                  </div>
-                  <div class="bg-palette-off-white dark:bg-gray-700 rounded-xl p-4 text-center">
-                    <p class="text-3xl font-bold text-red-600 dark:text-red-400">1</p>
-                    <p class="text-sm text-palette-medium-blue dark:text-gray-400">Absent</p>
-                  </div>
-                </div>
-                <div class="space-y-3">
-                  <div
-                    class="flex items-center justify-between p-3 bg-palette-off-white dark:bg-gray-700 rounded-lg"
+            <div class="relative">
+              <img
+                src="/device.png"
+                alt="Biometric access control devices with facial recognition and fingerprint scanning"
+                class="rounded-2xl shadow-2xl w-full h-auto"
+              />
+              <!-- Feature badges -->
+              <div class="absolute -bottom-4 left-4 right-4 flex justify-center gap-3">
+                <div
+                  class="bg-white dark:bg-gray-800 rounded-full px-4 py-2 shadow-lg flex items-center space-x-2"
+                >
+                  <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span class="text-sm font-medium text-palette-dark-blue dark:text-white"
+                    >Face Recognition</span
                   >
-                    <div class="flex items-center space-x-3">
-                      <div
-                        class="w-10 h-10 bg-palette-dark-blue dark:bg-palette-light-beige rounded-full flex items-center justify-center text-white dark:text-gray-900 font-semibold"
-                      >
-                        JD
-                      </div>
-                      <div>
-                        <p class="font-medium text-palette-dark-blue dark:text-white">John Doe</p>
-                        <p class="text-sm text-palette-medium-blue dark:text-gray-400">Clocked in at 8:45 AM</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div
-                    class="flex items-center justify-between p-3 bg-palette-off-white dark:bg-gray-700 rounded-lg"
+                </div>
+                <div
+                  class="bg-white dark:bg-gray-800 rounded-full px-4 py-2 shadow-lg flex items-center space-x-2"
+                >
+                  <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span class="text-sm font-medium text-palette-dark-blue dark:text-white"
+                    >Fingerprint</span
                   >
-                    <div class="flex items-center space-x-3">
-                      <div
-                        class="w-10 h-10 bg-palette-medium-blue rounded-full flex items-center justify-center text-white font-semibold"
-                      >
-                        AS
-                      </div>
-                      <div>
-                        <p class="font-medium text-palette-dark-blue dark:text-white">Ana Santos</p>
-                        <p class="text-sm text-palette-medium-blue dark:text-gray-400">Clocked in at 9:15 AM</p>
-                      </div>
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
@@ -308,7 +279,10 @@
     </section>
 
     <!-- Features Section -->
-    <section id="features" class="py-20 px-6 bg-white dark:bg-gray-800 transition-colors duration-300">
+    <section
+      id="features"
+      class="py-20 px-6 bg-white dark:bg-gray-800 transition-colors duration-300"
+    >
       <div class="max-w-7xl mx-auto">
         <div class="text-center max-w-3xl mx-auto mb-16">
           <h2 class="text-4xl font-bold text-palette-dark-blue dark:text-white mb-4">
@@ -326,7 +300,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -335,7 +314,9 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Fingerprint Scanner</h3>
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">
+              Fingerprint Scanner
+            </h3>
             <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Secure biometric authentication ensures only the right person clocks in. No more buddy
               punching.
@@ -349,7 +330,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -364,7 +350,9 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Face Recognition</h3>
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">
+              Face Recognition
+            </h3>
             <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Just show your face and you're clocked in. Fast, contactless, and incredibly accurate.
             </p>
@@ -377,7 +365,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -399,7 +392,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -408,7 +406,9 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Real-time Reports</h3>
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">
+              Real-time Reports
+            </h3>
             <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               See who's at work right now. Track patterns, identify issues, and make informed
               decisions.
@@ -422,7 +422,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -431,7 +436,9 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Multi-Branch Support</h3>
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">
+              Multi-Branch Support
+            </h3>
             <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Managing multiple locations? No problem. Track attendance across all your branches
               from one dashboard.
@@ -445,7 +452,12 @@
             <div
               class="w-14 h-14 bg-palette-dark-blue dark:bg-palette-light-beige rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform"
             >
-              <svg class="w-7 h-7 text-white dark:text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                class="w-7 h-7 text-white dark:text-gray-900"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -454,7 +466,9 @@
                 />
               </svg>
             </div>
-            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">Shift Management</h3>
+            <h3 class="text-xl font-bold text-palette-dark-blue dark:text-white mb-3">
+              Shift Management
+            </h3>
             <p class="text-palette-medium-blue dark:text-gray-300 leading-relaxed">
               Create and manage work schedules. Automatically track late arrivals and early
               departures.
@@ -534,7 +548,10 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 px-6 bg-palette-off-white dark:bg-gray-900 transition-colors duration-300">
+    <section
+      id="contact"
+      class="py-20 px-6 bg-palette-off-white dark:bg-gray-900 transition-colors duration-300"
+    >
       <div class="max-w-4xl mx-auto text-center">
         <h2 class="text-4xl font-bold text-palette-dark-blue dark:text-white mb-4">
           Ready to simplify your attendance tracking?
@@ -544,7 +561,9 @@
         </p>
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 max-w-xl mx-auto">
           <div class="space-y-6">
-            <div class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl">
+            <div
+              class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl"
+            >
               <div
                 class="w-12 h-12 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center flex-shrink-0"
               >
@@ -572,7 +591,9 @@
                 </a>
               </div>
             </div>
-            <div class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl">
+            <div
+              class="flex items-center space-x-4 p-4 bg-palette-off-white dark:bg-gray-700 rounded-xl"
+            >
               <div
                 class="w-12 h-12 bg-palette-dark-blue dark:bg-palette-light-beige rounded-lg flex items-center justify-center flex-shrink-0"
               >
@@ -602,7 +623,9 @@
             </div>
           </div>
           <div class="mt-8 pt-6 border-t border-palette-light-beige dark:border-gray-700">
-            <p class="text-palette-medium-blue dark:text-gray-400 text-sm mb-4">Already a customer?</p>
+            <p class="text-palette-medium-blue dark:text-gray-400 text-sm mb-4">
+              Already a customer?
+            </p>
             <div class="flex flex-col sm:flex-row gap-3 justify-center">
               <router-link
                 to="/company/login"
@@ -678,4 +701,3 @@ onUnmounted(() => {
   document.removeEventListener('click', handleClickOutside)
 })
 </script>
-
