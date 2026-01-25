@@ -21,6 +21,7 @@ import {
 import { handleError } from 'src/common/exceptions/filter.exception';
 import { omit } from 'lodash';
 import { ShiftService } from '../shift/shift.service';
+import { AttendanceStatusHelper } from './attendance-status.helper';
 
 @Injectable()
 export class ClockService {
@@ -31,6 +32,7 @@ export class ClockService {
     private readonly branchService: BranchService,
     private readonly userService: UserService,
     private readonly shiftService: ShiftService,
+    private readonly attendanceStatusHelper: AttendanceStatusHelper,
   ) {}
 
   async addRecord(data: TimeSyncMessage): Promise<Attendance[]> {
@@ -57,9 +59,20 @@ export class ClockService {
           }
 
           const localDate = toZonedTime(new Date(record.time), branch.timezone);
+          const dateString = format(localDate, 'yyyy-MM-dd');
+
+          // Check for user-specific non-working status (highest priority)
           const nonWorkingStatus = user.userNonWorkingStatus.find(
-            (status) => status.date === format(localDate, 'yyyy-MM-dd'),
+            (status) => status.date === dateString,
           );
+
+          // Check for branch-level holidays and rest days
+          const { isHoliday, isRestDay } =
+            await this.attendanceStatusHelper.getStatusForDate(
+              user.id as UUID,
+              branch.id as UUID,
+              dateString,
+            );
 
           if (user.department?.shift) {
             departmentName = user.department.name;
@@ -71,13 +84,25 @@ export class ClockService {
             endTime = shift.endTime;
           }
 
+          // Determine attendance status with priority:
+          // 1. User-specific non-working status (highest)
+          // 2. Branch holiday
+          // 3. Rest day rule
+          // 4. Default to PRESENT
+          let attendanceStatus: AttendanceStatus = AttendanceStatus.PRESENT;
+          if (nonWorkingStatus) {
+            attendanceStatus = nonWorkingStatus.status;
+          } else if (isHoliday) {
+            attendanceStatus = AttendanceStatus.NO_WORK;
+          } else if (isRestDay) {
+            attendanceStatus = AttendanceStatus.NO_WORK;
+          }
+
           return this.prisma.attendance.create({
             data: {
               userId: user.id,
               branchId: branch.id,
-              status: nonWorkingStatus
-                ? nonWorkingStatus.status
-                : AttendanceStatus.PRESENT,
+              status: attendanceStatus,
               time: new Date(record.time),
               deviceMode: this.mapDeviceMode(record.mode),
               createdAt: new Date(),
@@ -137,13 +162,6 @@ export class ClockService {
       });
 
       const attendancesWithManilaTime = attendances.map((attendance) => {
-        // const zonedDate = toZonedTime(attendance.time, branch.timezone);
-        // const formattedDate = format(zonedDate, 'yyyy-MM-dd HH:mm:ssXXX', {
-        //   timeZone: branch.timezone,
-        // });
-
-        // console.log(attendance.endTime, attendance.startTime);
-
         return {
           ...omit(attendance, [
             'user.profile.password',
