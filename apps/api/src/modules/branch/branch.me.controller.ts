@@ -35,7 +35,12 @@ export class BranchMeController {
   ) {}
 
   @Get()
-  @Roles(UserType.BRANCH_OWNER, UserType.BRANCH_ADMIN, UserType.BRANCH_ATTENDEE)
+  @Roles(
+    UserType.BRANCH_OWNER,
+    UserType.BRANCH_ADMIN,
+    UserType.BRANCH_ATTENDEE,
+    UserType.PAYROLL_MASTER,
+  )
   async getBranchDetails(@Req() req: RequestHeaderType) {
     return this.branchService.getBranchDetails(req.user.id);
   }
@@ -50,7 +55,12 @@ export class BranchMeController {
   }
 
   @Get('attendees')
-  @Roles(UserType.BRANCH_OWNER, UserType.BRANCH_ADMIN, UserType.BRANCH_ATTENDEE)
+  @Roles(
+    UserType.BRANCH_OWNER,
+    UserType.BRANCH_ADMIN,
+    UserType.BRANCH_ATTENDEE,
+    UserType.PAYROLL_MASTER,
+  )
   async getAttendeesByBranch(@Req() req: RequestHeaderType) {
     return this.attendeeService.findByBranch(req.user.branchId);
   }
@@ -89,7 +99,6 @@ export class BranchMeController {
     @Body(new ValidationPipe({ transform: true }))
     body: BranchChangePasswordDto,
   ) {
-    console.log(req.user);
     return this.branchService.changePassword(req.user.id, body);
   }
 }
