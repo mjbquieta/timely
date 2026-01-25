@@ -28,7 +28,7 @@ export class DepartmentMeController {
   constructor(private readonly departmentService: DepartmentService) {}
 
   @Get()
-  @Roles(UserType.BRANCH_OWNER, UserType.BRANCH_ADMIN)
+  @Roles(UserType.BRANCH_OWNER, UserType.BRANCH_ADMIN, UserType.PAYROLL_MASTER)
   async getDepartmentsByBranchId(@Req() req: RequestHeaderType) {
     return this.departmentService.findByBranch(req.user.branchId);
   }
