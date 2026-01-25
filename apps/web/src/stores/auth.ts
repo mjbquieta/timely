@@ -20,6 +20,7 @@ export const useAuthStore = defineStore('auth', () => {
   const isBranchOwner = computed(() => userType.value.includes('BRANCH_OWNER'))
   const isCompanyOwner = computed(() => userType.value.includes('COMPANY_OWNER'))
   const isAttendee = computed(() => userType.value.includes('ATTENDEE'))
+  const isPayrollMaster = computed(() => userType.value.includes('PAYROLL_MASTER'))
 
   // Initialize auth state from localStorage
   const initializeAuth = () => {
@@ -352,6 +353,7 @@ export const useAuthStore = defineStore('auth', () => {
     isBranchOwner,
     isCompanyOwner,
     isAttendee,
+    isPayrollMaster,
     initializeAuth,
     login,
     companyLogin,
