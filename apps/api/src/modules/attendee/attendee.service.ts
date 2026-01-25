@@ -86,8 +86,6 @@ export class AttendeeService implements OnModuleInit {
         },
       });
 
-      console.log(attendees);
-
       return attendees;
     } catch (error) {
       handleError(error);
