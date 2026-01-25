@@ -13,6 +13,10 @@ import { HttpExceptionFilter } from './common/exceptions/filter.exception';
 import { APP_FILTER } from '@nestjs/core';
 import { ShiftModule } from './modules/shift/shift.module';
 import { CompanyModule } from './modules/company/company.module';
+import { AuditModule } from './modules/audit/audit.module';
+import { HolidayModule } from './modules/holiday/holiday.module';
+import { RestDayModule } from './modules/rest-day/rest-day.module';
+import { PayrollCutoffModule } from './modules/payroll-cutoff/payroll-cutoff.module';
 
 @Module({
   imports: [
@@ -31,6 +35,10 @@ import { CompanyModule } from './modules/company/company.module';
     DepartmentModule,
     ShiftModule,
     CompanyModule,
+    AuditModule,
+    HolidayModule,
+    RestDayModule,
+    PayrollCutoffModule,
   ],
   providers: [
     {
