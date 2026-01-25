@@ -257,3 +257,142 @@ export interface DailyLog {
   day: string
   attendees: DailyAttendee[]
 }
+
+// Holiday Types
+export type HolidayType = 'REGULAR_HOLIDAY' | 'SPECIAL_NON_WORKING_HOLIDAY' | 'COMPANY_HOLIDAY'
+
+export interface Holiday {
+  id: string
+  branchId: string
+  name: string
+  type: HolidayType
+  startDate: string
+  endDate: string | null
+  isPaid: boolean
+  notes: string | null
+  version: number
+  effectiveStartDate: string
+  effectiveEndDate: string | null
+  isCurrentVersion: boolean
+  previousVersionId: string | null
+  isUsedInPayroll: boolean
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  createdBy: string
+}
+
+export interface CreateHolidayDto {
+  name: string
+  type: HolidayType
+  startDate: string
+  endDate?: string
+  isPaid?: boolean
+  notes?: string
+}
+
+export interface HolidayCheckResponse {
+  isHoliday: boolean
+  holiday: Holiday | null
+}
+
+// Rest Day Types
+export type RestDayScheduleType = 'FIXED_WEEKLY' | 'ROTATING'
+
+export interface RestDayRule {
+  id: string
+  name: string
+  scheduleType: RestDayScheduleType
+  fixedDays: number[]
+  workDays: number | null
+  restDays: number | null
+  patternStartDate: string | null
+  branchId: string | null
+  departmentId: string | null
+  userId: string | null
+  effectiveFrom: string
+  effectiveTo: string | null
+  version: number
+  previousVersionId: string | null
+  isCurrentVersion: boolean
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  createdBy: string
+}
+
+export interface CreateRestDayRuleDto {
+  name: string
+  scheduleType: RestDayScheduleType
+  fixedDays?: number[]
+  workDays?: number
+  restDays?: number
+  patternStartDate?: string
+  branchId?: string
+  departmentId?: string
+  userId?: string
+  effectiveFrom: string
+  effectiveTo?: string
+}
+
+export interface RestDayCheckResponse {
+  isRestDay: boolean
+  userId: string
+  date: string
+}
+
+// Payroll Cutoff Types
+export type PayrollCutoffStatus = 'DRAFT' | 'ACTIVE' | 'LOCKED' | 'RELEASED'
+
+export interface PayrollCutoff {
+  id: string
+  branchId: string
+  name: string
+  periodStartDate: string
+  periodStartTime: string
+  periodEndDate: string
+  periodEndTime: string
+  releaseDate: string | null
+  status: PayrollCutoffStatus
+  lockedAt: string | null
+  lockedBy: string | null
+  lastOverrideAt: string | null
+  lastOverrideBy: string | null
+  lastOverrideReason: string | null
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  createdBy: string
+}
+
+export interface CreatePayrollCutoffDto {
+  name: string
+  periodStartDate: string
+  periodStartTime: string
+  periodEndDate: string
+  periodEndTime: string
+  releaseDate?: string
+}
+
+// Audit Types
+export type AuditAction = 'CREATE' | 'UPDATE' | 'DELETE' | 'LOCK' | 'UNLOCK' | 'OVERRIDE'
+export type EntityType = 'HOLIDAY' | 'REST_DAY_RULE' | 'PAYROLL_CUTOFF'
+
+export interface AuditLog {
+  id: string
+  entityType: EntityType
+  entityId: string
+  action: AuditAction
+  performedBy: string
+  performedAt: string
+  beforeSnapshot: unknown
+  afterSnapshot: unknown
+  reason: string | null
+  performer?: {
+    id: string
+    profile?: {
+      name: string | null
+      email: string | null
+    }
+  }
+}
