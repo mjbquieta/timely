@@ -16,6 +16,15 @@ import type {
   Company,
   CompanyBranch,
   User,
+  Holiday,
+  CreateHolidayDto,
+  HolidayCheckResponse,
+  RestDayRule,
+  CreateRestDayRuleDto,
+  RestDayCheckResponse,
+  PayrollCutoff,
+  CreatePayrollCutoffDto,
+  AuditLog,
 } from '../types'
 
 // API Service Class
@@ -560,6 +569,277 @@ class ApiService {
     } catch (error: any) {
       console.error('Update user API error:', error)
       throw this.handleApiError(error, 'Failed to update user details')
+    }
+  }
+
+  // Holiday endpoints
+  async getHolidays(): Promise<Holiday[]> {
+    try {
+      const response = await api.get<Holiday[]>('/api/v1/me/holiday')
+      return response.data
+    } catch (error: any) {
+      console.error('Get holidays API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch holidays')
+    }
+  }
+
+  async getHoliday(holidayId: string): Promise<Holiday> {
+    try {
+      const response = await api.get<Holiday>(`/api/v1/me/holiday/${holidayId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get holiday API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch holiday')
+    }
+  }
+
+  async createHoliday(holidayData: CreateHolidayDto): Promise<Holiday> {
+    try {
+      const response = await api.post<Holiday>('/api/v1/me/holiday', holidayData)
+      return response.data
+    } catch (error: any) {
+      console.error('Create holiday API error:', error)
+      throw this.handleApiError(error, 'Failed to create holiday')
+    }
+  }
+
+  async updateHoliday(holidayId: string, holidayData: Partial<CreateHolidayDto>): Promise<Holiday> {
+    try {
+      const response = await api.put<Holiday>(`/api/v1/me/holiday/${holidayId}`, holidayData)
+      return response.data
+    } catch (error: any) {
+      console.error('Update holiday API error:', error)
+      throw this.handleApiError(error, 'Failed to update holiday')
+    }
+  }
+
+  async deleteHoliday(holidayId: string): Promise<void> {
+    try {
+      await api.delete(`/api/v1/me/holiday/${holidayId}`)
+    } catch (error: any) {
+      console.error('Delete holiday API error:', error)
+      throw this.handleApiError(error, 'Failed to delete holiday')
+    }
+  }
+
+  async checkHoliday(date: string): Promise<HolidayCheckResponse> {
+    try {
+      const response = await api.get<HolidayCheckResponse>(`/api/v1/me/holiday/check/${date}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Check holiday API error:', error)
+      throw this.handleApiError(error, 'Failed to check holiday')
+    }
+  }
+
+  async getHolidayHistory(holidayId: string): Promise<Holiday[]> {
+    try {
+      const response = await api.get<Holiday[]>(`/api/v1/me/holiday/${holidayId}/history`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get holiday history API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch holiday history')
+    }
+  }
+
+  // Rest Day endpoints
+  async getRestDayRules(): Promise<RestDayRule[]> {
+    try {
+      const response = await api.get<RestDayRule[]>('/api/v1/me/rest-day')
+      return response.data
+    } catch (error: any) {
+      console.error('Get rest day rules API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch rest day rules')
+    }
+  }
+
+  async getRestDayRule(ruleId: string): Promise<RestDayRule> {
+    try {
+      const response = await api.get<RestDayRule>(`/api/v1/me/rest-day/${ruleId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get rest day rule API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch rest day rule')
+    }
+  }
+
+  async createRestDayRule(ruleData: CreateRestDayRuleDto): Promise<RestDayRule> {
+    try {
+      const response = await api.post<RestDayRule>('/api/v1/me/rest-day', ruleData)
+      return response.data
+    } catch (error: any) {
+      console.error('Create rest day rule API error:', error)
+      throw this.handleApiError(error, 'Failed to create rest day rule')
+    }
+  }
+
+  async updateRestDayRule(
+    ruleId: string,
+    ruleData: Partial<CreateRestDayRuleDto>,
+  ): Promise<RestDayRule> {
+    try {
+      const response = await api.put<RestDayRule>(`/api/v1/me/rest-day/${ruleId}`, ruleData)
+      return response.data
+    } catch (error: any) {
+      console.error('Update rest day rule API error:', error)
+      throw this.handleApiError(error, 'Failed to update rest day rule')
+    }
+  }
+
+  async deleteRestDayRule(ruleId: string): Promise<void> {
+    try {
+      await api.delete(`/api/v1/me/rest-day/${ruleId}`)
+    } catch (error: any) {
+      console.error('Delete rest day rule API error:', error)
+      throw this.handleApiError(error, 'Failed to delete rest day rule')
+    }
+  }
+
+  async checkRestDay(userId: string, date: string): Promise<RestDayCheckResponse> {
+    try {
+      const response = await api.get<RestDayCheckResponse>(
+        `/api/v1/me/rest-day/check/${userId}/${date}`,
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Check rest day API error:', error)
+      throw this.handleApiError(error, 'Failed to check rest day')
+    }
+  }
+
+  async getUserRestDayRules(userId: string): Promise<RestDayRule[]> {
+    try {
+      const response = await api.get<RestDayRule[]>(`/api/v1/me/rest-day/user/${userId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get user rest day rules API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch user rest day rules')
+    }
+  }
+
+  // Payroll Cutoff endpoints
+  async getPayrollCutoffs(): Promise<PayrollCutoff[]> {
+    try {
+      const response = await api.get<PayrollCutoff[]>('/api/v1/me/payroll-cutoff')
+      return response.data
+    } catch (error: any) {
+      console.error('Get payroll cutoffs API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch payroll cutoffs')
+    }
+  }
+
+  async getPayrollCutoff(cutoffId: string): Promise<PayrollCutoff> {
+    try {
+      const response = await api.get<PayrollCutoff>(`/api/v1/me/payroll-cutoff/${cutoffId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch payroll cutoff')
+    }
+  }
+
+  async getCurrentPayrollCutoff(): Promise<PayrollCutoff | null> {
+    try {
+      const response = await api.get<PayrollCutoff>('/api/v1/me/payroll-cutoff/current')
+      return response.data
+    } catch (error: any) {
+      if (error.response?.status === 404) {
+        return null
+      }
+      console.error('Get current payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch current payroll cutoff')
+    }
+  }
+
+  async createPayrollCutoff(cutoffData: CreatePayrollCutoffDto): Promise<PayrollCutoff> {
+    try {
+      const response = await api.post<PayrollCutoff>('/api/v1/me/payroll-cutoff', cutoffData)
+      return response.data
+    } catch (error: any) {
+      console.error('Create payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to create payroll cutoff')
+    }
+  }
+
+  async updatePayrollCutoff(
+    cutoffId: string,
+    cutoffData: Partial<CreatePayrollCutoffDto>,
+  ): Promise<PayrollCutoff> {
+    try {
+      const response = await api.put<PayrollCutoff>(
+        `/api/v1/me/payroll-cutoff/${cutoffId}`,
+        cutoffData,
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Update payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to update payroll cutoff')
+    }
+  }
+
+  async deletePayrollCutoff(cutoffId: string): Promise<void> {
+    try {
+      await api.delete(`/api/v1/me/payroll-cutoff/${cutoffId}`)
+    } catch (error: any) {
+      console.error('Delete payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to delete payroll cutoff')
+    }
+  }
+
+  async activatePayrollCutoff(cutoffId: string): Promise<PayrollCutoff> {
+    try {
+      const response = await api.post<PayrollCutoff>(
+        `/api/v1/me/payroll-cutoff/${cutoffId}/activate`,
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Activate payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to activate payroll cutoff')
+    }
+  }
+
+  async lockPayrollCutoff(cutoffId: string): Promise<PayrollCutoff> {
+    try {
+      const response = await api.post<PayrollCutoff>(`/api/v1/me/payroll-cutoff/${cutoffId}/lock`)
+      return response.data
+    } catch (error: any) {
+      console.error('Lock payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to lock payroll cutoff')
+    }
+  }
+
+  async unlockPayrollCutoff(cutoffId: string, reason: string): Promise<PayrollCutoff> {
+    try {
+      const response = await api.post<PayrollCutoff>(
+        `/api/v1/me/payroll-cutoff/${cutoffId}/unlock`,
+        { reason },
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Unlock payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to unlock payroll cutoff')
+    }
+  }
+
+  async releasePayrollCutoff(cutoffId: string): Promise<PayrollCutoff> {
+    try {
+      const response = await api.post<PayrollCutoff>(
+        `/api/v1/me/payroll-cutoff/${cutoffId}/release`,
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Release payroll cutoff API error:', error)
+      throw this.handleApiError(error, 'Failed to release payroll cutoff')
+    }
+  }
+
+  async getPayrollCutoffAudit(cutoffId: string): Promise<AuditLog[]> {
+    try {
+      const response = await api.get<AuditLog[]>(`/api/v1/me/payroll-cutoff/${cutoffId}/audit`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get payroll cutoff audit API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch payroll cutoff audit')
     }
   }
 
