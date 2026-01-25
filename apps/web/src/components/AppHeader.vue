@@ -139,6 +139,91 @@
                 </svg>
                 <span class="text-sm font-medium">BRANCH DETAILS</span>
               </router-link>
+
+              <!-- Payroll Master Dropdown -->
+              <template v-if="authStore.isPayrollMaster">
+                <div class="relative">
+                  <button
+                    @click="toggleEmployeePayrollDropdown"
+                    class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200"
+                    :class="
+                      isEmployeePayrollRoute
+                        ? 'text-palette-dark-blue bg-palette-dark-blue bg-opacity-10 font-medium'
+                        : 'text-gray-600 hover:text-gray-900'
+                    "
+                  >
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span class="text-sm font-medium">PAYROLL</span>
+                    <svg
+                      class="w-4 h-4 transition-transform duration-200"
+                      :class="{ 'rotate-180': showEmployeePayrollDropdown }"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <!-- Dropdown Menu -->
+                  <div
+                    v-if="showEmployeePayrollDropdown"
+                    class="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+                  >
+                    <router-link
+                      to="/employee/holidays"
+                      @click="showEmployeePayrollDropdown = false"
+                      class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Holidays</span>
+                    </router-link>
+                    <router-link
+                      to="/employee/rest-days"
+                      @click="showEmployeePayrollDropdown = false"
+                      class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                        />
+                      </svg>
+                      <span>Rest Days</span>
+                    </router-link>
+                    <router-link
+                      to="/employee/payroll-cutoff"
+                      @click="showEmployeePayrollDropdown = false"
+                      class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Cutoff Payroll</span>
+                    </router-link>
+                  </div>
+                </div>
+              </template>
             </template>
 
             <!-- Company Portal Navigation -->
@@ -237,6 +322,89 @@
                 <span class="text-sm font-medium">Dashboard</span>
               </router-link>
 
+              <!-- Payroll Dropdown -->
+              <div class="relative">
+                <button
+                  @click="toggleBranchPayrollDropdown"
+                  class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200"
+                  :class="
+                    isBranchPayrollRoute
+                      ? 'text-palette-dark-blue bg-palette-dark-blue bg-opacity-10 font-medium'
+                      : 'text-gray-600 hover:text-gray-900'
+                  "
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">Payroll</span>
+                  <svg
+                    class="w-4 h-4 transition-transform duration-200"
+                    :class="{ 'rotate-180': showBranchPayrollDropdown }"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div
+                  v-if="showBranchPayrollDropdown"
+                  class="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+                >
+                  <router-link
+                    to="/holidays"
+                    @click="showBranchPayrollDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span>Holidays</span>
+                  </router-link>
+                  <router-link
+                    to="/rest-days"
+                    @click="showBranchPayrollDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                      />
+                    </svg>
+                    <span>Rest Days</span>
+                  </router-link>
+                  <router-link
+                    to="/payroll-cutoff"
+                    @click="showBranchPayrollDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"
+                      />
+                    </svg>
+                    <span>Cutoff Payroll</span>
+                  </router-link>
+                </div>
+              </div>
+
               <!-- Settings Link -->
               <router-link
                 to="/settings"
@@ -326,17 +494,51 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 import { apiService } from '../services/api'
 import type { BranchInfoResponse } from '../types'
 
 const router = useRouter()
+const route = useRoute()
 const authStore = useAuthStore()
 
 // Branch information from store
 const branchInfo = ref<BranchInfoResponse | null>(null)
+
+// Dropdown states
+const showBranchPayrollDropdown = ref(false)
+const showEmployeePayrollDropdown = ref(false)
+
+// Computed properties to check if current route is a payroll route
+const isBranchPayrollRoute = computed(() => {
+  return ['holidays', 'rest-days', 'payroll-cutoff'].includes(route.name as string)
+})
+
+const isEmployeePayrollRoute = computed(() => {
+  return ['employee-holidays', 'employee-rest-days', 'employee-payroll-cutoff'].includes(route.name as string)
+})
+
+// Toggle functions
+const toggleBranchPayrollDropdown = () => {
+  showBranchPayrollDropdown.value = !showBranchPayrollDropdown.value
+  showEmployeePayrollDropdown.value = false
+}
+
+const toggleEmployeePayrollDropdown = () => {
+  showEmployeePayrollDropdown.value = !showEmployeePayrollDropdown.value
+  showBranchPayrollDropdown.value = false
+}
+
+// Close dropdowns when clicking outside
+const handleClickOutside = (event: MouseEvent) => {
+  const target = event.target as HTMLElement
+  if (!target.closest('.relative')) {
+    showBranchPayrollDropdown.value = false
+    showEmployeePayrollDropdown.value = false
+  }
+}
 
 const fetchBranchInfo = async () => {
   // Only fetch branch info if not a company owner
@@ -368,5 +570,10 @@ const handleLogout = () => {
 
 onMounted(() => {
   fetchBranchInfo()
+  document.addEventListener('click', handleClickOutside)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('click', handleClickOutside)
 })
 </script>
