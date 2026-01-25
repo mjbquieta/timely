@@ -183,16 +183,11 @@ export class BranchService implements OnModuleInit {
 
       const newHashedPassword = await bcrypt.hash(newPassword, this.saltRounds);
 
-      // console.log(newHashedPassword);
-
-      // return users;
-
       return this.prisma.userProfile.update({
         where: { id: users.profile.id },
         data: { password: newHashedPassword },
       });
     } catch (error) {
-      console.log(error);
       handleError(error);
     }
   }
