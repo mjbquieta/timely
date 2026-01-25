@@ -76,6 +76,24 @@ const router = createRouter({
       component: () => import('../views/SettingsPage.vue'),
       meta: { requiresAuth: true },
     },
+    {
+      path: '/holidays',
+      name: 'holidays',
+      component: () => import('../views/HolidaysPage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/rest-days',
+      name: 'rest-days',
+      component: () => import('../views/RestDaysPage.vue'),
+      meta: { requiresAuth: true },
+    },
+    {
+      path: '/payroll-cutoff',
+      name: 'payroll-cutoff',
+      component: () => import('../views/PayrollCutoffPage.vue'),
+      meta: { requiresAuth: true },
+    },
     // Company routes
     {
       path: '/company/dashboard',
@@ -120,6 +138,25 @@ const router = createRouter({
       component: () => import('../views/EmployeeAttendanceLogsPage.vue'),
       meta: { requiresAuth: true, requiresAttendee: true },
     },
+    // Employee Portal - Payroll Master routes
+    {
+      path: '/employee/holidays',
+      name: 'employee-holidays',
+      component: () => import('../views/HolidaysPage.vue'),
+      meta: { requiresAuth: true, requiresAttendee: true, requiresPayrollMaster: true },
+    },
+    {
+      path: '/employee/rest-days',
+      name: 'employee-rest-days',
+      component: () => import('../views/RestDaysPage.vue'),
+      meta: { requiresAuth: true, requiresAttendee: true, requiresPayrollMaster: true },
+    },
+    {
+      path: '/employee/payroll-cutoff',
+      name: 'employee-payroll-cutoff',
+      component: () => import('../views/PayrollCutoffPage.vue'),
+      meta: { requiresAuth: true, requiresAttendee: true, requiresPayrollMaster: true },
+    },
   ],
 })
 
@@ -154,6 +191,12 @@ router.beforeEach((to, from, next) => {
   // Check if route requires attendee
   if (to.meta.requiresAttendee && !authStore.isAttendee) {
     next('/employee/login')
+    return
+  }
+
+  // Check if route requires payroll master
+  if (to.meta.requiresPayrollMaster && !authStore.isPayrollMaster) {
+    next('/employee/dashboard')
     return
   }
 
