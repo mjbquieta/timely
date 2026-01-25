@@ -60,6 +60,39 @@ enum PortalType {
   COMPANY_PORTAL
 }
 
+enum HolidayType {
+  REGULAR_HOLIDAY
+  SPECIAL_NON_WORKING_HOLIDAY
+  COMPANY_HOLIDAY
+}
+
+enum RestDayScheduleType {
+  FIXED_WEEKLY
+  ROTATING
+}
+
+enum PayrollCutoffStatus {
+  DRAFT
+  ACTIVE
+  LOCKED
+  RELEASED
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOCK
+  UNLOCK
+  OVERRIDE
+}
+
+enum EntityType {
+  HOLIDAY
+  REST_DAY_RULE
+  PAYROLL_CUTOFF
+}
+
 model Company {
   id       String  @id @default(uuid())
   name     String
@@ -101,11 +134,14 @@ model Branch {
   companyId          String?   @map("company_id")
 
   // Relations
-  users       User[]
-  attendances Attendance[]
-  departments Department[]
-  shifts      Shift[]
-  company     Company?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  users          User[]
+  attendances    Attendance[]
+  departments    Department[]
+  shifts         Shift[]
+  company        Company?        @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  holidays       Holiday[]
+  restDayRules   RestDayRule[]
+  payrollCutoffs PayrollCutoff[]
 
   @@map("branches")
 }
@@ -127,14 +163,20 @@ model User {
   deletedAt DateTime? @map("deleted_at")
 
   // Relations
-  branch               Branch?                @relation(fields: [branchId], references: [id])
-  profile              UserProfile?
-  attendances          Attendance[]
-  accessTokens         AccessToken[]
-  signatures           UserSignature[]
-  department           Department?            @relation(fields: [departmentId], references: [id])
-  userNonWorkingStatus UserNonWorkingStatus[]
-  companies            Company[]
+  branch                 Branch?                @relation(fields: [branchId], references: [id])
+  profile                UserProfile?
+  attendances            Attendance[]
+  accessTokens           AccessToken[]
+  signatures             UserSignature[]
+  department             Department?            @relation(fields: [departmentId], references: [id])
+  userNonWorkingStatus   UserNonWorkingStatus[]
+  companies              Company[]
+  auditLogs              AuditLog[]
+  createdHolidays        Holiday[]              @relation("HolidayCreator")
+  restDayRules           RestDayRule[]          @relation("UserRestDayRule")
+  createdRestDayRules    RestDayRule[]          @relation("RestDayCreator")
+  createdPayrollCutoffs  PayrollCutoff[]        @relation("PayrollCutoffCreator")
+  lockedPayrollCutoffs   PayrollCutoff[]        @relation("PayrollCutoffLocker")
 
   @@map("users")
 }
@@ -185,9 +227,10 @@ model Department {
   shiftId     String?   @map("shift_id")
 
   // Relations
-  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
-  users  User[]
-  shift  Shift? @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  branch       Branch        @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  users        User[]
+  shift        Shift?        @relation(fields: [shiftId], references: [id], onDelete: Cascade)
+  restDayRules RestDayRule[]
 
   @@map("departments")
 }
@@ -231,25 +274,27 @@ model UserSignature {
 }
 
 model Attendance {
-  id             String           @id @default(uuid())
-  userId         String           @map("user_id")
-  branchId       String           @map("branch_id")
-  time           DateTime         @map("time")
-  isTimeIn       Boolean          @default(true) @map("is_time_in")
-  deviceMode     DeviceMode       @default(UI_MGLOG_HAND_OPEN) @map("device_mode")
-  status         AttendanceStatus @default(PRESENT)
-  remarks        String?          @map("remarks")
-  createdAt      DateTime         @default(now()) @map("created_at")
-  updatedAt      DateTime         @updatedAt @map("updated_at")
-  deletedAt      DateTime?        @map("deleted_at")
-  timezone       String           @default("Asia/Manila") @map("timezone")
-  departmentName String?          @map("department_name")
-  startTime      String?          @map("start_time")
-  endTime        String?          @map("end_time")
+  id              String           @id @default(uuid())
+  userId          String           @map("user_id")
+  branchId        String           @map("branch_id")
+  time            DateTime         @map("time")
+  isTimeIn        Boolean          @default(true) @map("is_time_in")
+  deviceMode      DeviceMode       @default(UI_MGLOG_HAND_OPEN) @map("device_mode")
+  status          AttendanceStatus @default(PRESENT)
+  remarks         String?          @map("remarks")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  deletedAt       DateTime?        @map("deleted_at")
+  timezone        String           @default("Asia/Manila") @map("timezone")
+  departmentName  String?          @map("department_name")
+  startTime       String?          @map("start_time")
+  endTime         String?          @map("end_time")
+  payrollCutoffId String?          @map("payroll_cutoff_id")
 
   // Relations
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  user          User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch        Branch         @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  payrollCutoff PayrollCutoff? @relation(fields: [payrollCutoffId], references: [id])
 
   @@map("attendances")
 }
@@ -270,4 +315,140 @@ model AccessToken {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("access_tokens")
+}
+
+model AuditLog {
+  id             String      @id @default(uuid())
+  entityType     EntityType  @map("entity_type")
+  entityId       String      @map("entity_id")
+  action         AuditAction
+  performedBy    String      @map("performed_by")
+  performedAt    DateTime    @default(now()) @map("performed_at")
+  beforeSnapshot Json?       @map("before_snapshot")
+  afterSnapshot  Json?       @map("after_snapshot")
+  reason         String?
+
+  // Relations
+  performer User @relation(fields: [performedBy], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([performedBy])
+  @@index([performedAt])
+  @@map("audit_logs")
+}
+
+model Holiday {
+  id                 String      @id @default(uuid())
+  branchId           String      @map("branch_id")
+  name               String
+  type               HolidayType
+  startDate          String      @map("start_date")
+  endDate            String?     @map("end_date")
+  isPaid             Boolean     @default(true) @map("is_paid")
+  notes              String?
+
+  // Versioning (SCD Type 2)
+  version            Int         @default(1)
+  effectiveStartDate DateTime    @map("effective_start_date")
+  effectiveEndDate   DateTime?   @map("effective_end_date")
+  isCurrentVersion   Boolean     @default(true) @map("is_current_version")
+  previousVersionId  String?     @map("previous_version_id")
+  isUsedInPayroll    Boolean     @default(false) @map("is_used_in_payroll")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by")
+
+  // Relations
+  branch          Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  previousVersion Holiday?  @relation("HolidayVersions", fields: [previousVersionId], references: [id])
+  nextVersions    Holiday[] @relation("HolidayVersions")
+  creator         User      @relation("HolidayCreator", fields: [createdBy], references: [id])
+
+  @@index([branchId, isCurrentVersion])
+  @@index([startDate, endDate])
+  @@map("holidays")
+}
+
+model RestDayRule {
+  id               String              @id @default(uuid())
+  name             String
+  scheduleType     RestDayScheduleType @map("schedule_type")
+
+  // FIXED_WEEKLY: [0,6] = Sun, Sat
+  fixedDays        Int[]               @map("fixed_days")
+
+  // ROTATING: 4-on/1-off pattern
+  workDays         Int?                @map("work_days")
+  restDays         Int?                @map("rest_days")
+  patternStartDate String?             @map("pattern_start_date")
+
+  // Scope (priority: user > department > branch)
+  branchId         String?             @map("branch_id")
+  departmentId     String?             @map("department_id")
+  userId           String?             @map("user_id")
+
+  // Effective dating
+  effectiveFrom    DateTime            @map("effective_from")
+  effectiveTo      DateTime?           @map("effective_to")
+
+  // Versioning
+  version           Int      @default(1)
+  previousVersionId String?  @map("previous_version_id")
+  isCurrentVersion  Boolean  @default(true) @map("is_current_version")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by")
+
+  // Relations
+  branch          Branch?       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  department      Department?   @relation(fields: [departmentId], references: [id], onDelete: Cascade)
+  user            User?         @relation("UserRestDayRule", fields: [userId], references: [id], onDelete: Cascade)
+  previousVersion RestDayRule?  @relation("RestDayVersions", fields: [previousVersionId], references: [id])
+  nextVersions    RestDayRule[] @relation("RestDayVersions")
+  creator         User          @relation("RestDayCreator", fields: [createdBy], references: [id])
+
+  @@index([branchId, isCurrentVersion])
+  @@index([userId, isCurrentVersion])
+  @@index([departmentId, isCurrentVersion])
+  @@index([effectiveFrom, effectiveTo])
+  @@map("rest_day_rules")
+}
+
+model PayrollCutoff {
+  id                 String              @id @default(uuid())
+  branchId           String              @map("branch_id")
+  name               String
+
+  periodStartDate    DateTime            @map("period_start_date")
+  periodStartTime    String              @map("period_start_time")
+  periodEndDate      DateTime            @map("period_end_date")
+  periodEndTime      String              @map("period_end_time")
+
+  releaseDate        DateTime?           @map("release_date")
+  status             PayrollCutoffStatus @default(DRAFT)
+
+  lockedAt           DateTime?           @map("locked_at")
+  lockedBy           String?             @map("locked_by")
+  lastOverrideAt     DateTime?           @map("last_override_at")
+  lastOverrideBy     String?             @map("last_override_by")
+  lastOverrideReason String?             @map("last_override_reason")
+
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdBy String    @map("created_by")
+
+  // Relations
+  branch      Branch       @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  creator     User         @relation("PayrollCutoffCreator", fields: [createdBy], references: [id])
+  locker      User?        @relation("PayrollCutoffLocker", fields: [lockedBy], references: [id])
+  attendances Attendance[]
+
+  @@index([branchId, status])
+  @@index([periodStartDate, periodEndDate])
+  @@map("payroll_cutoffs")
 }
