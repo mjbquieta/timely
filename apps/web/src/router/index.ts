@@ -157,6 +157,33 @@ const router = createRouter({
       component: () => import('../views/PayrollCutoffPage.vue'),
       meta: { requiresAuth: true, requiresAttendee: true, requiresPayrollMaster: true },
     },
+    // Employee Portal - Time Requests (all employees)
+    {
+      path: '/employee/time-requests',
+      name: 'employee-time-requests',
+      component: () => import('../views/EmployeeTimeRequestsPage.vue'),
+      meta: { requiresAuth: true, requiresAttendee: true },
+    },
+    {
+      path: '/employee/leave-balance',
+      name: 'employee-leave-balance',
+      component: () => import('../views/EmployeeLeaveBalancePage.vue'),
+      meta: { requiresAuth: true, requiresAttendee: true },
+    },
+    // Branch Portal - Time Request Approvals
+    {
+      path: '/time-request-approvals',
+      name: 'time-request-approvals',
+      component: () => import('../views/TimeRequestApprovalsPage.vue'),
+      meta: { requiresAuth: true },
+    },
+    // Branch Portal - Leave Balance Management
+    {
+      path: '/leave-balances',
+      name: 'leave-balances',
+      component: () => import('../views/LeaveBalanceManagementPage.vue'),
+      meta: { requiresAuth: true },
+    },
   ],
 })
 

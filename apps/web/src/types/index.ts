@@ -376,7 +376,7 @@ export interface CreatePayrollCutoffDto {
 
 // Audit Types
 export type AuditAction = 'CREATE' | 'UPDATE' | 'DELETE' | 'LOCK' | 'UNLOCK' | 'OVERRIDE'
-export type EntityType = 'HOLIDAY' | 'REST_DAY_RULE' | 'PAYROLL_CUTOFF'
+export type EntityType = 'HOLIDAY' | 'REST_DAY_RULE' | 'PAYROLL_CUTOFF' | 'TIME_REQUEST' | 'LEAVE_BALANCE'
 
 export interface AuditLog {
   id: string
@@ -395,4 +395,140 @@ export interface AuditLog {
       email: string | null
     }
   }
+}
+
+// Time Request Types
+export type LeaveType = 'VL' | 'SL' | 'EL' | 'ML' | 'PL' | 'LWOP'
+export type TimeRequestType = 'LEAVE' | 'OVERTIME' | 'UNDERTIME'
+export type TimeRequestStatus = 'PENDING' | 'APPROVED' | 'REJECTED' | 'CANCELLED' | 'INCLUDED_IN_PAYROLL'
+export type HalfDayType = 'NONE' | 'AM' | 'PM'
+
+export interface TimeRequest {
+  id: string
+  branchId: string
+  userId: string
+  type: TimeRequestType
+  status: TimeRequestStatus
+  reason: string
+  attachmentUrl: string | null
+  // Leave specific
+  leaveType: LeaveType | null
+  startDate: string | null
+  endDate: string | null
+  halfDayType: HalfDayType | null
+  // OT specific
+  otDate: string | null
+  otStartTime: string | null
+  otEndTime: string | null
+  otTotalMinutes: number | null
+  // UT specific
+  utDate: string | null
+  utStartTime: string | null
+  utEndTime: string | null
+  utTotalMinutes: number | null
+  // Approval tracking
+  reviewedBy: string | null
+  reviewedAt: string | null
+  reviewerRemarks: string | null
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  // Relations
+  user?: Attendee
+  reviewer?: Attendee
+}
+
+export interface CreateLeaveRequestDto {
+  leaveType: LeaveType
+  startDate: string
+  endDate: string
+  halfDayType?: HalfDayType
+  reason: string
+  attachmentUrl?: string
+}
+
+export interface CreateOvertimeRequestDto {
+  otDate: string
+  otStartTime: string
+  otEndTime: string
+  reason: string
+  attachmentUrl?: string
+}
+
+export interface CreateUndertimeRequestDto {
+  utDate: string
+  utStartTime: string
+  utEndTime: string
+  reason: string
+  attachmentUrl?: string
+}
+
+export interface ReviewTimeRequestDto {
+  remarks?: string
+}
+
+// Leave Balance Types
+export interface LeaveBalance {
+  id: string
+  userId: string
+  branchId: string
+  leaveType: LeaveType
+  year: number
+  totalAllowance: number
+  usedDays: number
+  pendingDays: number
+  createdAt: string
+  updatedAt: string
+  user?: Attendee
+}
+
+export interface LeaveBalanceSummary {
+  balances: LeaveBalance[]
+  summary: {
+    totalAllowance: number
+    totalUsed: number
+    totalPending: number
+    totalAvailable: number
+  }
+}
+
+export interface CreateLeaveBalanceDto {
+  userId: string
+  leaveType: LeaveType
+  year: number
+  totalAllowance: number
+}
+
+// Overtime Policy Types
+export interface OvertimePolicy {
+  id: string
+  branchId: string
+  maxDailyOtMinutes: number
+  maxWeeklyOtMinutes: number
+  createdAt: string
+  updatedAt: string
+}
+
+// Leave Type Labels
+export const LEAVE_TYPE_LABELS: Record<LeaveType, string> = {
+  VL: 'Vacation Leave',
+  SL: 'Sick Leave',
+  EL: 'Emergency Leave',
+  ML: 'Maternity Leave',
+  PL: 'Paternity Leave',
+  LWOP: 'Leave Without Pay',
+}
+
+export const TIME_REQUEST_STATUS_LABELS: Record<TimeRequestStatus, string> = {
+  PENDING: 'Pending',
+  APPROVED: 'Approved',
+  REJECTED: 'Rejected',
+  CANCELLED: 'Cancelled',
+  INCLUDED_IN_PAYROLL: 'Included in Payroll',
+}
+
+export const HALF_DAY_TYPE_LABELS: Record<HalfDayType, string> = {
+  NONE: 'Full Day',
+  AM: 'Morning Half',
+  PM: 'Afternoon Half',
 }

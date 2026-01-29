@@ -17,6 +17,9 @@ import { AuditModule } from './modules/audit/audit.module';
 import { HolidayModule } from './modules/holiday/holiday.module';
 import { RestDayModule } from './modules/rest-day/rest-day.module';
 import { PayrollCutoffModule } from './modules/payroll-cutoff/payroll-cutoff.module';
+import { TimeRequestModule } from './modules/time-request/time-request.module';
+import { LeaveBalanceModule } from './modules/leave-balance/leave-balance.module';
+import { OvertimePolicyModule } from './modules/overtime-policy/overtime-policy.module';
 
 @Module({
   imports: [
@@ -39,6 +42,9 @@ import { PayrollCutoffModule } from './modules/payroll-cutoff/payroll-cutoff.mod
     HolidayModule,
     RestDayModule,
     PayrollCutoffModule,
+    TimeRequestModule,
+    LeaveBalanceModule,
+    OvertimePolicyModule,
   ],
   providers: [
     {

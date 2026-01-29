@@ -91,6 +91,37 @@ enum EntityType {
   HOLIDAY
   REST_DAY_RULE
   PAYROLL_CUTOFF
+  TIME_REQUEST
+  LEAVE_BALANCE
+}
+
+enum LeaveType {
+  VL   // Vacation Leave
+  SL   // Sick Leave
+  EL   // Emergency Leave
+  ML   // Maternity Leave
+  PL   // Paternity Leave
+  LWOP // Leave Without Pay
+}
+
+enum TimeRequestType {
+  LEAVE
+  OVERTIME
+  UNDERTIME
+}
+
+enum TimeRequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  CANCELLED
+  INCLUDED_IN_PAYROLL
+}
+
+enum HalfDayType {
+  NONE
+  AM
+  PM
 }
 
 model Company {
@@ -142,6 +173,9 @@ model Branch {
   holidays       Holiday[]
   restDayRules   RestDayRule[]
   payrollCutoffs PayrollCutoff[]
+  timeRequests   TimeRequest[]
+  leaveBalances  LeaveBalance[]
+  overtimePolicy OvertimePolicy?
 
   @@map("branches")
 }
@@ -177,6 +211,9 @@ model User {
   createdRestDayRules    RestDayRule[]          @relation("RestDayCreator")
   createdPayrollCutoffs  PayrollCutoff[]        @relation("PayrollCutoffCreator")
   lockedPayrollCutoffs   PayrollCutoff[]        @relation("PayrollCutoffLocker")
+  timeRequestsAsUser     TimeRequest[]          @relation("TimeRequestUser")
+  timeRequestsAsReviewer TimeRequest[]          @relation("TimeRequestReviewer")
+  leaveBalances          LeaveBalance[]
 
   @@map("users")
 }
@@ -451,4 +488,90 @@ model PayrollCutoff {
   @@index([branchId, status])
   @@index([periodStartDate, periodEndDate])
   @@map("payroll_cutoffs")
+}
+
+model TimeRequest {
+  id             String            @id @default(uuid())
+  branchId       String            @map("branch_id")
+  userId         String            @map("user_id")
+  type           TimeRequestType
+  status         TimeRequestStatus @default(PENDING)
+
+  // Common fields
+  reason         String
+  attachmentUrl  String?           @map("attachment_url")
+
+  // Leave specific
+  leaveType      LeaveType?        @map("leave_type")
+  startDate      DateTime?         @map("start_date")
+  endDate        DateTime?         @map("end_date")
+  halfDayType    HalfDayType?      @default(NONE) @map("half_day_type")
+
+  // OT specific
+  otDate         DateTime?         @map("ot_date")
+  otStartTime    String?           @map("ot_start_time")
+  otEndTime      String?           @map("ot_end_time")
+  otTotalMinutes Int?              @map("ot_total_minutes")
+
+  // UT specific
+  utDate         DateTime?         @map("ut_date")
+  utStartTime    String?           @map("ut_start_time")
+  utEndTime      String?           @map("ut_end_time")
+  utTotalMinutes Int?              @map("ut_total_minutes")
+
+  // Approval tracking
+  reviewedBy     String?           @map("reviewed_by")
+  reviewedAt     DateTime?         @map("reviewed_at")
+  reviewerRemarks String?          @map("reviewer_remarks")
+
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  deletedAt      DateTime?         @map("deleted_at")
+
+  // Relations
+  branch         Branch            @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  user           User              @relation("TimeRequestUser", fields: [userId], references: [id], onDelete: Cascade)
+  reviewer       User?             @relation("TimeRequestReviewer", fields: [reviewedBy], references: [id])
+
+  @@index([branchId, type, status])
+  @@index([userId, type])
+  @@index([startDate, endDate])
+  @@map("time_requests")
+}
+
+model LeaveBalance {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  branchId       String    @map("branch_id")
+  leaveType      LeaveType @map("leave_type")
+  year           Int
+  totalAllowance Float     @map("total_allowance")
+  usedDays       Float     @default(0) @map("used_days")
+  pendingDays    Float     @default(0) @map("pending_days")
+
+  createdAt      DateTime  @default(now()) @map("created_at")
+  updatedAt      DateTime  @updatedAt @map("updated_at")
+
+  // Relations
+  user           User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  branch         Branch    @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, leaveType, year])
+  @@index([branchId, year])
+  @@map("leave_balances")
+}
+
+model OvertimePolicy {
+  id                 String   @id @default(uuid())
+  branchId           String   @unique @map("branch_id")
+  maxDailyOtMinutes  Int      @default(240) @map("max_daily_ot_minutes")
+  maxWeeklyOtMinutes Int      @default(480) @map("max_weekly_ot_minutes")
+
+  createdAt          DateTime @default(now()) @map("created_at")
+  updatedAt          DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  branch             Branch   @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("overtime_policies")
 }

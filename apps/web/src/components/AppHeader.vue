@@ -140,6 +140,74 @@
                 <span class="text-sm font-medium">BRANCH DETAILS</span>
               </router-link>
 
+              <!-- Requests Dropdown (for all employees) -->
+              <div class="relative">
+                <button
+                  @click="toggleEmployeeRequestsDropdown"
+                  class="flex items-center space-x-2 px-3 py-2 rounded-lg transition-colors duration-200"
+                  :class="
+                    isEmployeeRequestsRoute
+                      ? 'text-palette-dark-blue bg-palette-dark-blue bg-opacity-10 font-medium'
+                      : 'text-gray-600 hover:text-gray-900'
+                  "
+                >
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                  <span class="text-sm font-medium">REQUESTS</span>
+                  <svg
+                    class="w-4 h-4 transition-transform duration-200"
+                    :class="{ 'rotate-180': showEmployeeRequestsDropdown }"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                <!-- Dropdown Menu -->
+                <div
+                  v-if="showEmployeeRequestsDropdown"
+                  class="absolute top-full left-0 mt-1 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50"
+                >
+                  <router-link
+                    to="/employee/time-requests"
+                    @click="showEmployeeRequestsDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+                      />
+                    </svg>
+                    <span>My Requests</span>
+                  </router-link>
+                  <router-link
+                    to="/employee/leave-balance"
+                    @click="showEmployeeRequestsDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                    <span>Leave Balance</span>
+                  </router-link>
+                </div>
+              </div>
+
               <!-- Payroll Master Dropdown -->
               <template v-if="authStore.isPayrollMaster">
                 <div class="relative">
@@ -220,6 +288,38 @@
                         />
                       </svg>
                       <span>Cutoff Payroll</span>
+                    </router-link>
+                    <!-- Separator -->
+                    <div class="my-1 border-t border-gray-200"></div>
+                    <router-link
+                      to="/time-request-approvals"
+                      @click="showEmployeePayrollDropdown = false"
+                      class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                        />
+                      </svg>
+                      <span>Approvals</span>
+                    </router-link>
+                    <router-link
+                      to="/leave-balances"
+                      @click="showEmployeePayrollDropdown = false"
+                      class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                        />
+                      </svg>
+                      <span>Leave Balances</span>
                     </router-link>
                   </div>
                 </div>
@@ -402,6 +502,38 @@
                     </svg>
                     <span>Cutoff Payroll</span>
                   </router-link>
+                  <!-- Separator -->
+                  <div class="my-1 border-t border-gray-200"></div>
+                  <router-link
+                    to="/time-request-approvals"
+                    @click="showBranchPayrollDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                      />
+                    </svg>
+                    <span>Approvals</span>
+                  </router-link>
+                  <router-link
+                    to="/leave-balances"
+                    @click="showBranchPayrollDropdown = false"
+                    class="flex items-center space-x-2 px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+                      />
+                    </svg>
+                    <span>Leave Balances</span>
+                  </router-link>
                 </div>
               </div>
 
@@ -510,25 +642,38 @@ const branchInfo = ref<BranchInfoResponse | null>(null)
 // Dropdown states
 const showBranchPayrollDropdown = ref(false)
 const showEmployeePayrollDropdown = ref(false)
+const showEmployeeRequestsDropdown = ref(false)
 
 // Computed properties to check if current route is a payroll route
 const isBranchPayrollRoute = computed(() => {
-  return ['holidays', 'rest-days', 'payroll-cutoff'].includes(route.name as string)
+  return ['holidays', 'rest-days', 'payroll-cutoff', 'time-request-approvals', 'leave-balances'].includes(route.name as string)
 })
 
 const isEmployeePayrollRoute = computed(() => {
-  return ['employee-holidays', 'employee-rest-days', 'employee-payroll-cutoff'].includes(route.name as string)
+  return ['employee-holidays', 'employee-rest-days', 'employee-payroll-cutoff', 'time-request-approvals', 'leave-balances'].includes(route.name as string)
+})
+
+const isEmployeeRequestsRoute = computed(() => {
+  return ['employee-time-requests', 'employee-leave-balance'].includes(route.name as string)
 })
 
 // Toggle functions
 const toggleBranchPayrollDropdown = () => {
   showBranchPayrollDropdown.value = !showBranchPayrollDropdown.value
   showEmployeePayrollDropdown.value = false
+  showEmployeeRequestsDropdown.value = false
 }
 
 const toggleEmployeePayrollDropdown = () => {
   showEmployeePayrollDropdown.value = !showEmployeePayrollDropdown.value
   showBranchPayrollDropdown.value = false
+  showEmployeeRequestsDropdown.value = false
+}
+
+const toggleEmployeeRequestsDropdown = () => {
+  showEmployeeRequestsDropdown.value = !showEmployeeRequestsDropdown.value
+  showBranchPayrollDropdown.value = false
+  showEmployeePayrollDropdown.value = false
 }
 
 // Close dropdowns when clicking outside
@@ -537,6 +682,7 @@ const handleClickOutside = (event: MouseEvent) => {
   if (!target.closest('.relative')) {
     showBranchPayrollDropdown.value = false
     showEmployeePayrollDropdown.value = false
+    showEmployeeRequestsDropdown.value = false
   }
 }
 

@@ -25,6 +25,16 @@ import type {
   PayrollCutoff,
   CreatePayrollCutoffDto,
   AuditLog,
+  TimeRequest,
+  TimeRequestType,
+  TimeRequestStatus,
+  CreateLeaveRequestDto,
+  CreateOvertimeRequestDto,
+  CreateUndertimeRequestDto,
+  ReviewTimeRequestDto,
+  LeaveBalance,
+  LeaveBalanceSummary,
+  CreateLeaveBalanceDto,
 } from '../types'
 
 // API Service Class
@@ -840,6 +850,211 @@ class ApiService {
     } catch (error: any) {
       console.error('Get payroll cutoff audit API error:', error)
       throw this.handleApiError(error, 'Failed to fetch payroll cutoff audit')
+    }
+  }
+
+  // Time Request endpoints (Employee)
+  async getMyTimeRequests(params?: {
+    type?: TimeRequestType
+    status?: TimeRequestStatus
+  }): Promise<TimeRequest[]> {
+    try {
+      const queryParams = new URLSearchParams()
+      if (params?.type) queryParams.append('type', params.type)
+      if (params?.status) queryParams.append('status', params.status)
+
+      const url = `/api/v1/me/time-request${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      const response = await api.get<TimeRequest[]>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get my time requests API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch time requests')
+    }
+  }
+
+  async getTimeRequest(requestId: string): Promise<TimeRequest> {
+    try {
+      const response = await api.get<TimeRequest>(`/api/v1/me/time-request/${requestId}`)
+      return response.data
+    } catch (error: any) {
+      console.error('Get time request API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch time request')
+    }
+  }
+
+  async createLeaveRequest(data: CreateLeaveRequestDto): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>('/api/v1/me/time-request/leave', data)
+      return response.data
+    } catch (error: any) {
+      console.error('Create leave request API error:', error)
+      throw this.handleApiError(error, 'Failed to create leave request')
+    }
+  }
+
+  async createOvertimeRequest(data: CreateOvertimeRequestDto): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>('/api/v1/me/time-request/overtime', data)
+      return response.data
+    } catch (error: any) {
+      console.error('Create overtime request API error:', error)
+      throw this.handleApiError(error, 'Failed to create overtime request')
+    }
+  }
+
+  async createUndertimeRequest(data: CreateUndertimeRequestDto): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>('/api/v1/me/time-request/undertime', data)
+      return response.data
+    } catch (error: any) {
+      console.error('Create undertime request API error:', error)
+      throw this.handleApiError(error, 'Failed to create undertime request')
+    }
+  }
+
+  async cancelTimeRequest(requestId: string): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>(`/api/v1/me/time-request/${requestId}/cancel`)
+      return response.data
+    } catch (error: any) {
+      console.error('Cancel time request API error:', error)
+      throw this.handleApiError(error, 'Failed to cancel time request')
+    }
+  }
+
+  // Time Request endpoints (Approval - Admin)
+  async getPendingTimeRequests(params?: {
+    userId?: string
+    type?: TimeRequestType
+  }): Promise<TimeRequest[]> {
+    try {
+      const queryParams = new URLSearchParams()
+      if (params?.userId) queryParams.append('userId', params.userId)
+      if (params?.type) queryParams.append('type', params.type)
+
+      const url = `/api/v1/me/time-request/pending${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      const response = await api.get<TimeRequest[]>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get pending time requests API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch pending time requests')
+    }
+  }
+
+  async getApprovedTimeRequests(params?: {
+    userId?: string
+    type?: TimeRequestType
+  }): Promise<TimeRequest[]> {
+    try {
+      const queryParams = new URLSearchParams()
+      if (params?.userId) queryParams.append('userId', params.userId)
+      if (params?.type) queryParams.append('type', params.type)
+
+      const url = `/api/v1/me/time-request/approved${queryParams.toString() ? `?${queryParams.toString()}` : ''}`
+      const response = await api.get<TimeRequest[]>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get approved time requests API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch approved time requests')
+    }
+  }
+
+  async approveTimeRequest(requestId: string, data?: ReviewTimeRequestDto): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>(
+        `/api/v1/me/time-request/${requestId}/approve`,
+        data || {},
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Approve time request API error:', error)
+      throw this.handleApiError(error, 'Failed to approve time request')
+    }
+  }
+
+  async rejectTimeRequest(requestId: string, data?: ReviewTimeRequestDto): Promise<TimeRequest> {
+    try {
+      const response = await api.post<TimeRequest>(
+        `/api/v1/me/time-request/${requestId}/reject`,
+        data || {},
+      )
+      return response.data
+    } catch (error: any) {
+      console.error('Reject time request API error:', error)
+      throw this.handleApiError(error, 'Failed to reject time request')
+    }
+  }
+
+  // Leave Balance endpoints (Employee)
+  async getMyLeaveBalance(year?: number): Promise<LeaveBalanceSummary> {
+    try {
+      const url = year ? `/api/v1/me/leave-balance?year=${year}` : '/api/v1/me/leave-balance'
+      const response = await api.get<LeaveBalanceSummary>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get my leave balance API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch leave balance')
+    }
+  }
+
+  // Leave Balance endpoints (Admin)
+  async getBranchLeaveBalances(year?: number): Promise<LeaveBalance[]> {
+    try {
+      const url = year ? `/api/v1/me/leave-balance/branch?year=${year}` : '/api/v1/me/leave-balance/branch'
+      const response = await api.get<LeaveBalance[]>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get branch leave balances API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch branch leave balances')
+    }
+  }
+
+  async getUserLeaveBalance(userId: string, year?: number): Promise<LeaveBalanceSummary> {
+    try {
+      const url = year
+        ? `/api/v1/me/leave-balance/user/${userId}?year=${year}`
+        : `/api/v1/me/leave-balance/user/${userId}`
+      const response = await api.get<LeaveBalanceSummary>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Get user leave balance API error:', error)
+      throw this.handleApiError(error, 'Failed to fetch user leave balance')
+    }
+  }
+
+  async createLeaveBalance(data: CreateLeaveBalanceDto): Promise<LeaveBalance> {
+    try {
+      const response = await api.post<LeaveBalance>('/api/v1/me/leave-balance', data)
+      return response.data
+    } catch (error: any) {
+      console.error('Create leave balance API error:', error)
+      throw this.handleApiError(error, 'Failed to create leave balance')
+    }
+  }
+
+  async initializeUserLeaveBalances(userId: string, year?: number): Promise<LeaveBalance[]> {
+    try {
+      const url = year
+        ? `/api/v1/me/leave-balance/user/${userId}/initialize?year=${year}`
+        : `/api/v1/me/leave-balance/user/${userId}/initialize`
+      const response = await api.post<LeaveBalance[]>(url)
+      return response.data
+    } catch (error: any) {
+      console.error('Initialize user leave balances API error:', error)
+      throw this.handleApiError(error, 'Failed to initialize user leave balances')
+    }
+  }
+
+  async updateLeaveBalance(
+    balanceId: string,
+    data: { totalAllowance?: number; usedDays?: number },
+  ): Promise<LeaveBalance> {
+    try {
+      const response = await api.put<LeaveBalance>(`/api/v1/me/leave-balance/${balanceId}`, data)
+      return response.data
+    } catch (error: any) {
+      console.error('Update leave balance API error:', error)
+      throw this.handleApiError(error, 'Failed to update leave balance')
     }
   }
 
