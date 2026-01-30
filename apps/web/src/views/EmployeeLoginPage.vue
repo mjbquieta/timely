@@ -12,12 +12,15 @@
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
         </svg>
         <div class="flex items-center space-x-2">
-          <div class="w-6 h-6 bg-palette-dark-blue rounded flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-            </svg>
-          </div>
-          <span class="font-semibold">Timely</span>
+          <img
+            src="/logo.png"
+            alt="Timely PH Logo"
+            class="w-6 h-6 rounded"
+          />
+          <span class="font-semibold">
+            <span class="text-palette-dark-blue">Timely</span>
+            <span class="text-teal-500">PH</span>
+          </span>
         </div>
       </router-link>
 
