@@ -1,32 +1,46 @@
-# Single-stage build for Vue.js attendance app
-FROM node:20-alpine
+# Multi-stage build for Vue.js attendance app
+FROM node:22 AS base
 
-# Set working directory
+RUN npm i -g pnpm@9.15.4
+
+FROM base AS dependencies
+
 WORKDIR /app
-
-# Copy package files
 COPY package.json pnpm-lock.yaml ./
-
-# Install pnpm
-RUN npm install -g pnpm
 
 # Install dependencies
 RUN pnpm install --frozen-lockfile
 
-# Copy source code
+FROM base AS build
+
+WORKDIR /app
 COPY . .
+COPY --from=dependencies /app/node_modules ./node_modules
 
-RUN rm -rf .env
+# Install rollup binary for linux x64 (required for Vite build)
+RUN pnpm add -D @rollup/rollup-linux-x64-gnu --filter=attendance-app
 
-# Build the application
-RUN pnpm run build
+RUN rm -rf apps/web/.env
 
-# Copy startup script
-COPY start.sh /start.sh
+# Build only the web application
+RUN pnpm run build:web
+
+FROM nginx:alpine AS production
+
+# Copy built files to nginx
+COPY --from=build /app/apps/web/dist /usr/share/nginx/html
+
+# Copy nginx config
+COPY apps/web/nginx.conf /etc/nginx/conf.d/default.conf
+
+# Copy startup script for runtime env config
+COPY apps/web/start.sh /start.sh
 RUN chmod +x /start.sh
 
-# Expose port 5173
-EXPOSE 5173
+# Update start.sh to work with nginx paths
+RUN sed -i 's|/app/dist|/usr/share/nginx/html|g' /start.sh
 
-# Start the application using the startup script
-CMD ["/start.sh", "pnpm", "run", "preview", "--host", "0.0.0.0", "--port", "5173"]
+EXPOSE 80
+
+# Use start.sh to generate env-config.js then start nginx
+CMD ["/start.sh", "nginx", "-g", "daemon off;"]
